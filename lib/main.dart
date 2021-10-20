@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late File _image;
+     File _image = File("path");
   final picker = ImagePicker();
 
   Future getImage(ImageSource src) async {
@@ -51,9 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("109. Image Picker"),
       ),
       body: Center(
-        child: _image == null
-            ? const Text('No image selected.')
-            : Image.file(_image),
+        child:
+        _image == null ? Text("No Image Selected") : Image.file(_image),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_a_photo),
