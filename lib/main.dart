@@ -1,37 +1,59 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 void main() {
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    // ignore: prefer_const_constructors
+    return MaterialApp(
+      // ignore: prefer_const_constructors
       home: MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late File _image;
+  final picker = ImagePicker();
 
-  getImage() async{
-
+  Future getImage(ImageSource src) async {
+    final pickedFile = await picker.getImage(source: src);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("109. Image Picker"),
+        // ignore: prefer_const_constructors
+        title: Text("109. Image Picker"),
       ),
-      body: const Center(
-        child: Text("No Image selected"),
+      body: Center(
+        child: _image == null
+            ? const Text('No image selected.')
+            : Image.file(_image),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_a_photo),
@@ -57,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       title: Text("Gallery"),
                       onTap: () {
+                        getImage(ImageSource.gallery);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -75,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       title: Text("Camera"),
                       onTap: () {
+                        getImage(ImageSource.camera);
                         Navigator.of(context).pop();
                       },
                     ),
